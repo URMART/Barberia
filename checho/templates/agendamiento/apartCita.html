@@ -1,0 +1,75 @@
+{% extends 'bases/base.html' %}
+
+{% block content %}
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridMonth',
+          locale:'es',
+          headerToolbar: {
+            left: 'prev,next',
+            center: 'title',
+            right: 'dayGridMonth'
+          },
+          events: [
+
+            {
+              title: '{{emple}}',
+              start: '{{fecha}}',
+              end: '{{fechaf}}'
+            }
+
+          ]
+        });
+        calendar.render();
+    });
+
+    </script>
+
+<div class="row my-4  cont2" style="border: solid 1px rgb(3, 3, 3);">
+
+    <div class="col col-sm-8 col-md-8 col-lg-8 col-xl-8">
+        <div id="">
+            <div id='calendar' style="background-color: white"></div>
+        </div>
+    </div>
+
+    <div class="col col-sm-4 col-md-4 col-lg-4 col-xl-4 container"  style="background-color: white; ; text-align:center">
+        <div style="padding-top: 13em">
+            <h1 id="color" >ESCOJA EL DIA</h1 >
+            {% if datos %}
+                <form action="{% url 'checho:guardarDia'%}" method="post" style="margin:1em " >{% csrf_token %}
+
+
+                    <select class="form-select form-select-lg mb-3" name="dias" required >
+                        <option value="">Seleccione el dia</option>
+                        <option value="L">Lunes</option>
+                        <option value="M">Martes</option>
+                        <option value="X">Miercoles</option>
+                        <option value="J">Jueves</option>
+                        <option value="V">Viernes</option>
+                        <option value="S">Sabado</option>
+                        <option value="D">Domingo</option>
+                    </select>
+
+
+
+
+                    <input type="text" value="{{empleado}}" hidden name="empleado">
+                    <input type="text" value="{{fecha}}" hidden name="fecha">
+                    <input type="text" value="{{fechaf}}" hidden name="fechaf">
+
+                    <button type="submit" class="btn btn-info my-2" >Enviar</button>
+
+                </form>
+            {% else %}
+                <h1  > No hay citas disponibles</h1 >
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

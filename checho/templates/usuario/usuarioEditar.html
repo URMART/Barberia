@@ -1,0 +1,54 @@
+{% extends 'bases/base.html' %}
+{% block title %}CHECHO BARBERS USUARIOS{% endblock%}
+
+{%block content %}
+
+<div id="listar">
+
+    <section class="container ">
+        <div class=" py-3">
+
+            <form action="{% url 'checho:guardadoUsuario' %}" method="post">{% csrf_token %}
+
+                <div class="row g-3 my-5">
+                    <h1 style="color: white; ">EDITAR USUARIO</h1>
+                    <div class="col">
+                        <label style="color: aliceblue;" for="">Nombre</label>
+                        <input type="text" class="form-control" value="{{usuario.nombre}}" name="nombre" placeholder="Nombre "
+                            aria-label="First name">
+                    </div>
+                    <div class="col">
+                        <label style="color: aliceblue;" for="">Apellido</label>
+                        <input type="text" class="form-control" value="{{usuario.apellido}}" name="apellido" placeholder="Apellido"
+                            aria-label="Last name">
+                    </div>
+                    <div class="col">
+                        <label style="color: aliceblue;" for="">Telefono</label>
+                        <input type="number" class="form-control" value="{{usuario.numeroTelefono}}" name="telefono" placeholder="numero de telefono"
+                            aria-label="Last name">
+                    </div>
+                    <label style="color: aliceblue;" for="">Rol</label><br />
+                    <select class="form-control" name="rol" style="width:70%; margin-left: auto; margin-right:auto;">
+                        <option value="">Seleccione</option>
+                        <option value="A">Administrador</option>
+                        <option value="C">Cliente</option>
+                        <option value="E">Empleado</option>
+                        
+                    </select><br/>
+                    <input type="hidden" name="id" value="{{usuario.id}}">
+                </div>
+
+                <div>
+                    <button type="submit" class="btn btn-success">REGISTAR</button>
+                </div><br>
+            </form>
+
+        </div>
+
+
+    </section><br>
+
+</div>
+
+
+{%endblock%}

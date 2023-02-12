@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css'%}">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>Login</title>
+</head>
+
+<header></header>
+
+<nav class="navbar navbar-expand-lg bg-dark ">
+    <div class="container-fluid">
+        <div><a class="navbar-brand text-light hoverNav" href="{% url 'checho:index' %}">CHECHO BARBERS</a></div>
+    </div>
+</nav>
+
+<body>
+
+
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{% if message.tags != 'error' %}{{ message.tags }}{% else %}danger{% endif %} alert-dismissible fade show"
+        role="alert">{{ message }}<button type="button" class="btn-close" data-bs-dismiss="alert"
+            aria-label="Close"></button></div>
+    {% endfor %}
+    {% endif %}
+
+
+    <div class="login-box">
+         <h2>RECUPERAR CONTRASEÑA</h2>
+        <form action="{% url 'checho:recuperarClave' %}" method="post">
+
+            {% csrf_token %}
+            <div class="user-box">
+                <input type="text" name="user" required>
+                <label>Usuario</label>
+            </div>
+
+            <div class="user-box">
+                <input type="text" name="palabraClave" required>
+                <label>Palabra clave</label>
+            </div>
+
+            <button type="submit" style="width:100% ;">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                VERIFICAR
+            </button>
+
+            <div class="container text-center my-2">
+                <a class="btn bg-info " href="{% url 'checho:login' %}">
+                    <p>VOLVER</p>
+                </a>
+            </div>
+
+
+        </form>
+
+    </div><br>
+
+
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+
+</body>
+
+
+
+</html>

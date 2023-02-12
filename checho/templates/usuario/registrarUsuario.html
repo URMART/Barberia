@@ -1,0 +1,58 @@
+{% extends 'bases/base.html' %}
+{% block title %}CHECHO BARBERS REGISTRO{% endblock%}
+
+{%block content %}
+
+<div id="listar">
+
+    <section class="container ">
+        <div class=" py-3">
+            <form action="{% url 'checho:guardarUsuario' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+                <div class="row g-3 my-5">
+                    <h1 style="color: white; ">REGISTAR USUARIO</h1>
+                    <div class="col">
+                        <input type="text" class="form-control" name="nombre" placeholder="Nombre" aria-label="First name">
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control" name="apellido" placeholder="Apellido" aria-label="Last name">
+                    </div>
+
+                </div>
+                <div class="row g-3 my-5">
+                    <div class="col">
+                        <input type="text" class="form-control" name="telefono" placeholder="Numero Telefono" aria-label="Last name">
+                    </div>
+                </div>
+                <div class="row g-3 my-5">
+                    <div class="col">
+                        <input type="email" class="form-control" name="correo" placeholder="Correo" aria-label="Last name">
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control"  name="palabraClave"   placeholder="Palabra clave" aria-label="Last name">
+                    </div>
+                </div>
+                <div class="row g-3 my-5">
+                    <div class="col">
+                        <input type="text" class="form-control" name="user" placeholder="Usuario" aria-label="Last name">
+                    </div>
+                    <div class="col">
+                        <input type="password" class="form-control"  name="passw"   placeholder="Contraseña" aria-label="Last name">
+                    </div>
+                </div>
+                <label for="">Foto</label><br />
+                <input type="file" class="form-control" name="foto" style="width:70%; margin-left: auto; margin-right:auto;" accept="image/*"><br/>
+
+                <div>
+                    <button type="submit" class="btn btn-success">REGISTAR</button>
+                </div><br>
+            </form>
+
+        </div>
+
+
+    </section><br>
+
+</div>
+
+
+{%endblock%}

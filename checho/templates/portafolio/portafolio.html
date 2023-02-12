@@ -1,0 +1,28 @@
+{% extends 'bases/base.html' %}{%load static%}
+{% block title %}CORTES{% endblock%}
+
+{%block content %}
+
+{% if portafolio %}
+   
+    <div id="portafolio">
+        <div class="container">
+            <h2 class="text-center letra">{{ portafolio.categoria }}</h2>
+            <div class="row">
+                {% for i in portafolio %}
+                    <div class="card m-3" style="width: 18rem;">
+                        <img style="width:260px; height: 290px " src="{{ i.foto.url }}" class="card-img-top" alt="{{ i.nombreServicio }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ i.nombreServicio }}</h5>
+                            <p class="card-text">{{ i.precio }}</p>
+                            <p class="card-text">{{ i.categoria }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+                
+            </div><br><br>
+        </div>
+    </div>
+
+{% endif %}
+{%endblock%}

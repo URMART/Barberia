@@ -1,0 +1,47 @@
+{% extends 'bases/base.html' %}
+
+{% block content %}
+
+<div style="background-color: white; margin:5%;">
+    <section class="container  " style="text-align:center;">
+        <div class=" py-3">
+            <h1>Generar Agenda</h1>
+            <form action="{% url 'checho:guardadoAgenda' %}" method="post">{% csrf_token %}
+
+                <div class="row g-3 my-2">
+                    <h1 style="color: white; ">AGENDA EMPLEADO</h1>
+                    <div class="col">
+                        <label style="color: aliceblue;" for="">Fecha Inicio</label>
+                        <input type="date" class="form-control"  name="fechaInicio" placeholder="Fecha Inicio "
+                            aria-label="First name">
+                    </div>
+                    <div class="col">
+                        <label style="color: aliceblue;" for="">Fecha Fin</label>
+                        <input type="date" class="form-control"  name="fechaFin" placeholder="Fecha Fin"
+                            aria-label="Last name">
+                    </div>
+
+                    <label style="color: aliceblue;" for="">Empleado</label><br />
+                    <select class="form-control" name="Empleado" style="width:70%; margin-left: auto; margin-right:auto;">
+                        {% for i in datos %}
+                            <option value="{{i.id}}">{{i.nombre}}</option>
+                        {% endfor %}
+
+
+                    </select><br/>
+                    <input type="hidden" name="id" value="{{usuario.id}}">
+                </div>
+
+                <div>
+                    <button type="submit" class="btn btn-success my-2">REGISTAR</button>
+                </div><br>
+            </form>
+
+        </div>
+
+
+    </section><br>
+
+
+</div>
+{% endblock %}

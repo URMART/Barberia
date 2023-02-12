@@ -1,0 +1,403 @@
+{%load static%}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock%}</title>
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+        integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css'%}">
+    <link rel="stylesheet" href="{% static 'fullcalendar-5.11.3/lib/main.css'%}">
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+
+</head>
+
+<body onload="startTime()">
+
+
+    <header ></header>
+
+    {% if request.session.logueo.4 == 'Administrador' %}
+        <nav class="navbar navbar-expand-lg bg-dark ">
+            <div class="container-fluid">
+                <div><a class="navbar-brand text-light hoverNav  " href="#">CHECHO BARBERS</a></div>
+                <div>
+
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon bg-secondary"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                            <li class="nav-item">
+                                <a class="nav-link active text-light hoverNav" aria-current="page"
+                                    href="{% url 'checho:index' %}">INICIO</a>
+                            </li>
+
+
+
+
+                            <li class="nav-item dropdown text-light">
+                                <a class="nav-link dropdown-toggle text-light hoverNav" href="#" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    SERVICIOS
+                                </a>
+                                <ul class="dropdown-menu tama2 ">
+                                    <li><a class="dropdown-item" href="{% url 'checho:portafolio' 'barba' %}">BARBAS</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'checho:portafolio' 'corte' %}">CORTES</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'checho:portafolio' 'tintura' %}">TINTURAS</a></li>
+
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown text-light">
+                                <a class="nav-link dropdown-toggle text-light hoverNav" href="#" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    OPCIONES
+                                </a>
+                                <ul class="dropdown-menu tama2 ">
+
+                                    <li><a class="dropdown-item" href="{% url 'checho:listarServicios' %}">LISTAR
+                                            SERVICIOS</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'checho:listarUsuarios' %}">LISTAR
+                                            USUARIOS</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="nav-item dropdown text-light">
+                                <a class="nav-link dropdown-toggle text-light hoverNav" href="#" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    OTROS
+                                </a>
+
+                                <ul class="dropdown-menu tama2 ">
+                                    <li><a class="dropdown-item" href="{% url 'checho:registrarServicio' %}">REGISTRAR
+                                            SERVICIOS</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'checho:verAgendamiento' %}">VER AGENDAS</a></li>
+                                </ul>
+
+
+
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active text-light hoverNav" aria-current="page" href="{% url 'checho:agendamiento' %}">
+                                    DISPONIBILIDAD</a>
+                            </li>
+
+
+
+                            <li class="nav-item text-light me-5">
+                                <a class="nav-link text-light hoverNav" href="#contacto">CONTACTO</a>
+                            </li>
+
+
+                            {% if request.session.logueo %}
+                            <a href="{% url 'checho:perfil' %}" class="btn btn-info">
+                                <strong>{{ request.session.logueo.1 }} {{ request.session.logueo.2 }}</strong>
+                            </a>
+                            <li class="nav-item text-light">
+                                <a class="nav-link text-light hoverNav" href="{% url 'checho:logout' %}">CERRAR
+                                    SESION</a>
+                            </li>
+                            {% else %}
+                            <li class="nav-item text-light">
+                                <a class="nav-link text-light hoverNav" href="{% url 'checho:loginFormulario' %}">INICIO
+                                    SESION</a>
+                            </li>
+                            <li class="nav-item text-light">
+                                <a class="nav-link text-light hoverNav"
+                                    href="{% url 'checho:registrarUsuario' %}">REGISTRARSE</a>
+                            </li>
+
+                            {% endif %}
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </nav>
+    {% elif request.session.logueo.4 == 'Empleado' %}
+
+        <nav class="navbar navbar-expand-lg bg-dark ">
+            <div class="container-fluid">
+                <div><a class="navbar-brand text-light hoverNav  " href="#">CHECHO BARBERS</a></div>
+                <div>
+
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon bg-secondary"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                            <li class="nav-item">
+                                <a class="nav-link active text-light hoverNav" aria-current="page"
+                                    href="{% url 'checho:index' %}">INICIO</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active text-light hoverNav" aria-current="page" href="{% url 'checho:verAgendaEmpleado' %}">VER MIS
+                                    AGENDA</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link active text-light hoverNav" aria-current="page" href="{% url 'checho:agendamiento' %}">
+                                    DISPONIBILIDAD</a>
+                            </li>
+
+
+
+                            <li class="nav-item dropdown text-light">
+                                <a class="nav-link dropdown-toggle text-light hoverNav" href="#" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    SERVICIOS
+                                </a>
+                                <ul class="dropdown-menu tama2 ">
+                                    <li><a class="dropdown-item" href="{% url 'checho:portafolio' 'barba' %}">BARBAS</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'checho:portafolio' 'corte' %}">CORTES</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'checho:portafolio' 'tintura' %}">TINTURAS</a></li>
+
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown text-light">
+                                <a class="nav-link dropdown-toggle text-light hoverNav" href="#" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    OPCIONES
+                                </a>
+                                <ul class="dropdown-menu tama2 ">
+                                    <li><a class="dropdown-item" href="{% url 'checho:listarClientes' %}">LISTAR
+                                            CLIENTES</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="nav-item dropdown text-light">
+                                <a class="nav-link dropdown-toggle text-light hoverNav" href="#" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    OTROS
+                                </a>
+
+                                <ul class="dropdown-menu tama2 ">
+                                    <li><a class="dropdown-item" href="{% url 'checho:registrarServicio' %}">REGISTRAR
+                                            SERVICIOS</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'checho:listarServicios' %}">LISTAR
+                                        SERVICIOS
+                                    </a></li>
+                                </ul>
+
+
+
+                            </li>
+
+
+                            <li class="nav-item text-light me-5">
+                                <a class="nav-link text-light hoverNav" href="#contacto">CONTACTO</a>
+                            </li>
+
+
+                            {% if request.session.logueo %}
+                            <a href="{% url 'checho:perfil' %}" class="btn btn-info">
+                                <strong>{{ request.session.logueo.1 }} {{ request.session.logueo.2 }}</strong>
+                            </a>
+                            <li class="nav-item text-light">
+                                <a class="nav-link text-light hoverNav" href="{% url 'checho:logout' %}">CERRAR
+                                    SESION</a>
+                            </li>
+                            {% else %}
+                            <li class="nav-item text-light">
+                                <a class="nav-link text-light hoverNav" href="{% url 'checho:loginFormulario' %}">INICIO
+                                    SESION</a>
+                            </li>
+                            <li class="nav-item text-light">
+                                <a class="nav-link text-light hoverNav"
+                                    href="{% url 'checho:registrarUsuario' %}">REGISTRARSE</a>
+                            </li>
+
+                            {% endif %}
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </nav>
+    {% elif  request.session.logueo.4 == 'Cliente' %}
+
+        <nav class="navbar navbar-expand-lg bg-dark ">
+            <div class="container-fluid">
+                <div><a class="navbar-brand text-light hoverNav  " href="{% url 'checho:index' %}">CHECHO BARBERS</a></div>
+                <div>
+
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon bg-secondary"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                            <li class="nav-item">
+                                <a class="nav-link active text-light hoverNav" aria-current="page"
+                                    href="{% url 'checho:index' %}">INICIO</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active text-light hoverNav" aria-current="page" href="{% url 'checho:verMiCita' %}">VER MIS
+                                    CITAS</a>
+                            </li>
+                            <li class="nav-item text-light">
+                                    <a class="nav-link text-light hoverNav" {% if request.session.logueo %}
+                                       href="{% url 'checho:apartarCita' %}"{% else %}onclick="alert('debes registrarte para continuar')"{% endif %} >AGENDAR CITA</a>
+                            </li>
+
+                            <li class="nav-item dropdown text-light">
+                                <a class="nav-link dropdown-toggle text-light hoverNav" href="#" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    SERVICIOS
+                                </a>
+                                <ul class="dropdown-menu tama2 ">
+                                    <li><a class="dropdown-item" href="{% url 'checho:portafolio' 'barba' %}">BARBAS</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'checho:portafolio' 'corte' %}">CORTES</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'checho:portafolio' 'tintura' %}">TINTURAS</a></li>
+
+                                </ul>
+                            </li>
+
+                            <li class="nav-item text-light me-5" >
+                                <a class="nav-link text-light hoverNav" style="margin-right:2em " href="#contacto">CONTACTO</a>
+                            </li>
+
+
+                            {% if request.session.logueo %}
+                            <a href="{% url 'checho:perfil' %}" class="btn btn-info">
+                                <strong>{{ request.session.logueo.1 }} {{ request.session.logueo.2 }}</strong>
+                            </a>
+                            <li class="nav-item text-light">
+                                <a class="nav-link text-light hoverNav" href="{% url 'checho:logout' %}">CERRAR
+                                    SESION</a>
+                            </li>
+                            {% else %}
+                            <li class="nav-item text-light">
+                                <a class="nav-link text-light hoverNav" href="{% url 'checho:loginFormulario' %}">INICIO
+                                    SESION</a>
+                            </li>
+                            <li class="nav-item text-light">
+                                <a class="nav-link text-light hoverNav"
+                                    href="{% url 'checho:registrarUsuario' %}">REGISTRARSE</a>
+                            </li>
+
+                            {% endif %}
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </nav>
+    {% else %}
+        <nav class="navbar navbar-expand-lg bg-dark ">
+            <div class="container-fluid">
+                <div><a class="navbar-brand text-light hoverNav  " href="#">CHECHO BARBERS</a></div>
+                <div>
+
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon bg-secondary"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                            <li class="nav-item">
+                                <a class="nav-link active text-light hoverNav" aria-current="page"
+                                    href="{% url 'checho:index' %}">INICIO</a>
+                            </li>
+
+
+                            <li class="nav-item dropdown text-light">
+                                <a class="nav-link dropdown-toggle text-light hoverNav" href="#" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    SERVICIOS
+                                </a>
+                                <ul class="dropdown-menu tama2 ">
+                                    <li><a class="dropdown-item" href="{% url 'checho:portafolio' 'barba' %}">BARBAS</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'checho:portafolio' 'corte' %}">CORTES</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'checho:portafolio' 'tintura' %}">TINTURAS</a></li>
+
+                                </ul>
+                            </li>
+
+
+
+
+                            <li class="nav-item text-light">
+                                <a class="nav-link text-light hoverNav" {% if request.session.logueo %}href="#"
+                                {% else %}onclick="alert('debes registrarte para continuar')"{% endif %} >AGENDA
+                                    TU CITA</a>
+                            </li>
+
+                            <li class="nav-item text-light me-5">
+                                <a class="nav-link text-light hoverNav" href="#contacto">CONTACTO</a>
+                            </li>
+
+                            <li class="nav-item text-light">
+                                <a class="nav-link text-light hoverNav" href="{% url 'checho:loginFormulario' %}">INICIO
+                                    SESION</a>
+                            </li>
+                            <li class="nav-item text-light">
+                                <a class="nav-link text-light hoverNav"
+                                    href="{% url 'checho:registrarUsuario' %}">REGISTRARSE</a>
+                            </li>
+
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </nav>
+    {% endif %}
+
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{% if message.tags != 'error' %}{{ message.tags }}{% else %}danger{% endif %} alert-dismissible fade show"
+        role="alert">{{ message }}<button type="button" class="btn-close" data-bs-dismiss="alert"
+            aria-label="Close"></button></div>
+    {% endfor %}
+    {% endif %}
+
+    <main>{%block content %}{%endblock%}</main>
+    <footer >
+        <div class="row">
+
+            <div class="col  col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
+                <h5>CHECHO BARBER</h5>
+                <p>Copyright © 2022 Todos los derechos reservados</p>
+
+            </div>
+            <div class="col  col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                <h5 id="contacto">CONTACTO</h5>
+                <p> Telefono (3714526)</p>
+                <p>Gmail (chechobarber75@gmail.com)</p>
+
+            </div>
+            <div class="col  col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                <h5>UBICACION</h5>
+                <a target="_blank" href=""><img src="{% static 'img/maps.jpg' %}" alt="maps" id="im4"></a>
+            </div>
+        </div>
+    </footer>
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+    <script src="{% static 'fullcalendar-5.11.3/lib/main.js'%}"></script>
+
+    <script src="{%static 'js/controller.js' %}"></script>
+    <script src="{% static 'js/jquery-3.6.1.min.js'%}"></script>
+</body>
+
+</html>

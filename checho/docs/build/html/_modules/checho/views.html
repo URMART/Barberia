@@ -1,0 +1,569 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>checho.views &#8212; barberia 1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/nature.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">barberia 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">checho.views</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for checho.views</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">messages</span>
+
+<span class="kn">from</span> <span class="nn">django.core.paginator</span> <span class="kn">import</span> <span class="n">Paginator</span>
+<span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">IntegrityError</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span><span class="p">,</span><span class="n">redirect</span>
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+<span class="kn">from</span>  <span class="nn">.models</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">django.core.paginator</span> <span class="kn">import</span> <span class="n">Paginator</span>
+
+<span class="kn">from</span> <span class="nn">django.core.files.storage</span> <span class="kn">import</span> <span class="n">FileSystemStorage</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">remove</span><span class="p">,</span> <span class="n">path</span> 
+<span class="n">BASE_DIR</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span>
+<span class="kn">from</span> <span class="nn">.crys</span> <span class="kn">import</span> <span class="n">claveEncriptada</span>
+
+
+<div class="viewcode-block" id="loginFormulario"><a class="viewcode-back" href="../../modules/checho.html#checho.views.loginFormulario">[docs]</a><span class="k">def</span> <span class="nf">loginFormulario</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Esta funcion renderiza el formulacio de login.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        html:Pagina de login.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="s1">&#39;login/login.html&#39;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="login"><a class="viewcode-back" href="../../modules/checho.html#checho.views.login">[docs]</a><span class="k">def</span> <span class="nf">login</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;&quot;Esta funcion valida el logueo de un</span>
+<span class="sd">    usuario,  crea una variable de sesion.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        user (str): Nombre de usuario.</span>
+<span class="sd">        pasw (str): Password de usuario.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        html:Pagina de inicio.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1">#capturar datos del formulario</span>
+            <span class="n">user</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;usua&quot;</span><span class="p">]</span>
+            <span class="n">pasw</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;clave&quot;</span><span class="p">]</span> 
+            
+            <span class="c1">#verificar si existe en base de datos</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="n">Usuarios</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">usuario</span> <span class="o">=</span> <span class="n">user</span><span class="p">,</span> <span class="n">contraseña</span> <span class="o">=</span> <span class="n">pasw</span><span class="p">)</span>
+            
+            <span class="c1">#crear la variable de sesion</span>
+            <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s2">&quot;logueo&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">q</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">q</span><span class="o">.</span><span class="n">nombre</span><span class="p">,</span> <span class="n">q</span><span class="o">.</span><span class="n">apellido</span><span class="p">,</span> <span class="n">q</span><span class="o">.</span><span class="n">rol</span><span class="p">,</span> <span class="n">q</span><span class="o">.</span><span class="n">get_rol_display</span><span class="p">()]</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;bienvenido&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;checho:index&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">Usuarios</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Usuario o contraseña incorrectos...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;checho:loginFormulario&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Usted no envió datos...&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;checho:loginFormulario&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="logout"><a class="viewcode-back" href="../../modules/checho.html#checho.views.logout">[docs]</a><span class="k">def</span> <span class="nf">logout</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;&quot;Esta funcion cierra la sesion de un usuario</span>
+<span class="sd">    y elimina la variable de sesion.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        html: Pagina de inicio.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">del</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s2">&quot;logueo&quot;</span><span class="p">]</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Sesión cerrada correctamente!&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Ocurrió un error, intente de nuevo...&quot;</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;checho:index&#39;</span><span class="p">)</span></div>
+
+
+<span class="c1">#return HttpResponseRedirect(reverse(&#39;territorio:aprendiz&#39;))</span>
+
+<span class="c1">#</span>
+<div class="viewcode-block" id="index"><a class="viewcode-back" href="../../modules/checho.html#checho.views.index">[docs]</a><span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Esta funcion renderiza</span>
+<span class="sd">    la pagina de inicio.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        html: Pagina de inicio.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;index.html&#39;</span><span class="p">)</span></div>
+
+
+<span class="c1">#Crud usuarios</span>
+<div class="viewcode-block" id="listarUsuarios"><a class="viewcode-back" href="../../modules/checho.html#checho.views.listarUsuarios">[docs]</a><span class="k">def</span> <span class="nf">listarUsuarios</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Esta funcion consulta   una lista</span>
+<span class="sd">    de usuarios de la base de datos.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        html: Listado de usuarios.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">q</span><span class="o">=</span><span class="n">Usuarios</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">pag</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>   <span class="c1">#cinco registros por página</span>
+    <span class="n">page_number</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;page&#39;</span><span class="p">)</span>
+        
+        <span class="c1">#sobreescribo el query</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">pag</span><span class="o">.</span><span class="n">get_page</span><span class="p">(</span><span class="n">page_number</span><span class="p">)</span>
+        
+    <span class="n">contexto</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;page_obj&#39;</span><span class="p">:</span> <span class="n">q</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="s1">&#39;usuario/listarUsuario.html&#39;</span><span class="p">,</span><span class="n">contexto</span><span class="p">)</span>   </div>
+
+<div class="viewcode-block" id="eliminarUser"><a class="viewcode-back" href="../../modules/checho.html#checho.views.eliminarUser">[docs]</a><span class="k">def</span> <span class="nf">eliminarUser</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="nb">id</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Esta funcion consulta un usuario en la</span>
+<span class="sd">    base de datos por id y lo elimina.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        id (int): Recibe el id del usuario.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        html: pagina donde se listan los usuario.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span> 
+        <span class="n">q</span><span class="o">=</span><span class="n">Usuarios</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
+
+        <span class="n">q</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;Usuario Eliminado&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;checho:listarUsuarios&#39;</span><span class="p">)</span> 
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;  </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="registrarUsuario"><a class="viewcode-back" href="../../modules/checho.html#checho.views.registrarUsuario">[docs]</a><span class="k">def</span> <span class="nf">registrarUsuario</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Esta funcion renderiza la pagina para</span>
+<span class="sd">    realizar los registros de los usuarios.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        html: Pagina para registro de usuarios</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;usuario/registrarUsuario.html&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="guardarUsuario"><a class="viewcode-back" href="../../modules/checho.html#checho.views.guardarUsuario">[docs]</a><span class="k">def</span> <span class="nf">guardarUsuario</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Esta funcion recibe los parametros enviados</span>
+<span class="sd">     por post y crea un usuario en la base de datos.</span>
+
+<span class="sd">     Args:</span>
+<span class="sd">        f (file): Foto del usuario</span>
+<span class="sd">        nom (str): Nombre del usuario</span>
+<span class="sd">        apell (str): Apellidoo del usuario</span>
+<span class="sd">        numTel (int): Numero de telefono del usuario</span>
+<span class="sd">        user (str): Usuario</span>
+<span class="sd">        contra (str): Password</span>
+
+<span class="sd">     Returns:</span>
+<span class="sd">           html: Pagina de inicio</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;POST&#39;</span><span class="p">:</span>
+            
+            <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">FILES</span><span class="p">:</span>
+                <span class="c1">#Crear instancia de File System Storage</span>
+                <span class="n">fss</span> <span class="o">=</span> <span class="n">FileSystemStorage</span><span class="p">()</span>
+                <span class="c1">#Capturar la foto del formulario</span>
+                <span class="n">f</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">FILES</span><span class="p">[</span><span class="s2">&quot;foto&quot;</span><span class="p">]</span>
+                <span class="c1">#Cargar archivo al servidor</span>
+                <span class="n">file</span> <span class="o">=</span> <span class="n">fss</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;checho/fotos/&quot;</span> <span class="o">+</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;-------------------- pailas -----&#39;</span><span class="p">)</span>
+                
+            <span class="k">else</span><span class="p">:</span>
+                
+                <span class="n">file</span> <span class="o">=</span> <span class="s2">&quot;checho/fotos/default.png&quot;</span> 
+
+            <span class="n">nom</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s1">&#39;nombre&#39;</span><span class="p">]</span>
+            <span class="n">apell</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s1">&#39;apellido&#39;</span><span class="p">]</span>
+            <span class="n">numTel</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s1">&#39;telefono&#39;</span><span class="p">]</span>
+            <span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">]</span>
+            <span class="n">contra</span><span class="o">=</span><span class="n">claveEncriptada</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s1">&#39;passw&#39;</span><span class="p">])</span> 
+
+            <span class="n">q</span><span class="o">=</span><span class="n">Usuarios</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">nombre</span><span class="o">=</span><span class="n">nom</span><span class="p">,</span><span class="n">apellido</span><span class="o">=</span><span class="n">apell</span><span class="p">,</span><span class="n">numeroTelefono</span><span class="o">=</span><span class="n">numTel</span><span class="p">,</span><span class="n">usuario</span><span class="o">=</span><span class="n">user</span><span class="p">,</span><span class="n">contraseña</span><span class="o">=</span><span class="n">contra</span><span class="p">,</span><span class="n">foto</span><span class="o">=</span><span class="n">file</span><span class="p">)</span>
+
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;Usuario agregado&#39;</span><span class="p">)</span>
+
+            <span class="k">return</span>  <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;checho:index&#39;</span><span class="p">)</span>
+                    
+        <span class="k">else</span><span class="p">:</span>
+                
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Usted no envio datos &quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;checho:index&#39;</span><span class="p">)</span> 
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Error: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;checho:index&#39;</span><span class="p">)</span>  </div>
+
+<div class="viewcode-block" id="editarUsuarios"><a class="viewcode-back" href="../../modules/checho.html#checho.views.editarUsuarios">[docs]</a><span class="k">def</span> <span class="nf">editarUsuarios</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="nb">id</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Esta funcion consulta  un usuario</span>
+<span class="sd">    en la base de datos por id.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        id (int): Recibe el id del usuario.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        html: Pagina del formulario para editar el usuario.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">usuario</span><span class="o">=</span><span class="n">Usuarios</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;usuario/usuarioEditar.html&#39;</span><span class="p">,{</span><span class="s1">&#39;usuario&#39;</span><span class="p">:</span><span class="n">usuario</span><span class="p">})</span>    </div>
+
+<div class="viewcode-block" id="guardadoUsuario"><a class="viewcode-back" href="../../modules/checho.html#checho.views.guardadoUsuario">[docs]</a><span class="k">def</span> <span class="nf">guardadoUsuario</span> <span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Esta funcion consulta un usuario</span>
+<span class="sd">     en la base de datos por id y</span>
+<span class="sd">     actualiza sus datos.</span>
+
+<span class="sd">     Args:</span>
+<span class="sd">         nom (str): Nombre del usuario</span>
+<span class="sd">         ape (str): Apellido del usuario</span>
+<span class="sd">         tel (int): Telefono del usuario</span>
+<span class="sd">         id (int): Id del usuario</span>
+<span class="sd">         rol (str): Rol del usuario</span>
+
+<span class="sd">     Returns:</span>
+<span class="sd">         html: Pagina para listar los usuarios.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;POST&#39;</span><span class="p">:</span>
+            <span class="n">nom</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s1">&#39;nombre&#39;</span><span class="p">]</span>
+            <span class="n">ape</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s1">&#39;apellido&#39;</span><span class="p">]</span>
+            <span class="n">tel</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s1">&#39;telefono&#39;</span><span class="p">]</span>
+            <span class="nb">id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+            <span class="n">rol</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s1">&#39;rol&#39;</span><span class="p">]</span>
+
+            <span class="n">usuarios</span><span class="o">=</span><span class="n">Usuarios</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
+
+            <span class="n">usuarios</span><span class="o">.</span><span class="n">nombre</span> <span class="o">=</span> <span class="n">nom</span>
+            <span class="n">usuarios</span><span class="o">.</span><span class="n">apellido</span> <span class="o">=</span><span class="n">ape</span>
+            <span class="n">usuarios</span><span class="o">.</span><span class="n">numeroTelefono</span><span class="o">=</span><span class="n">tel</span>
+            <span class="n">usuarios</span><span class="o">.</span><span class="n">rol</span><span class="o">=</span><span class="n">rol</span>
+
+            <span class="n">usuarios</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;Usuario agregado&#39;</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;checho:listarUsuarios&#39;</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Usted no envio datos &quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;checho:listarUsuarios&#39;</span><span class="p">)</span>    
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Error: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;checho:listarUsuarios&#39;</span><span class="p">)</span></div>
+
+
+<span class="c1">#Actualizacion del perfil del usuario</span>
+<div class="viewcode-block" id="perfil"><a class="viewcode-back" href="../../modules/checho.html#checho.views.perfil">[docs]</a><span class="k">def</span> <span class="nf">perfil</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Esta funcion renderiza el perfil del usuario.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        html: Formulario para editar el perfil del usuario.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">login</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;logueo&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">Usuarios</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span> <span class="o">=</span> <span class="n">login</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">contexto</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;perfil&#39;</span><span class="p">:</span><span class="n">q</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;usuario/perfil.html&#39;</span><span class="p">,</span> <span class="n">contexto</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="actualizarPerfil"><a class="viewcode-back" href="../../modules/checho.html#checho.views.actualizarPerfil">[docs]</a><span class="k">def</span> <span class="nf">actualizarPerfil</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Esta funcion consulta un usuario por id</span>
+<span class="sd">    en la base de datos y actualiza su perfil.</span>
+
+
+<span class="sd">    Args:</span>
+<span class="sd">        q.nombre (str): Nombre de usuario</span>
+<span class="sd">        q.apellido (str): Apellido de usuario</span>
+<span class="sd">        q.numeroTelefono (str): Numero de telefono del usuario</span>
+<span class="sd">        q.contraseña (str): Password del usuario</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">          html: Pefil del usuario</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">login</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;logueo&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="n">Usuarios</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span> <span class="o">=</span> <span class="n">login</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">q</span><span class="o">.</span><span class="n">nombre</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;nombre&quot;</span><span class="p">]</span>
+            <span class="n">q</span><span class="o">.</span><span class="n">apellido</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;apellido&quot;</span><span class="p">]</span>
+            <span class="n">q</span><span class="o">.</span><span class="n">numeroTelefono</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;telefono&quot;</span><span class="p">]</span>
+            <span class="c1">#Cambio para los datos unicos de la base de datos</span>
+            <span class="k">if</span> <span class="n">q</span><span class="o">.</span><span class="n">usuario</span> <span class="o">!=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;usuario&quot;</span><span class="p">]:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">consulta</span> <span class="o">=</span> <span class="n">Usuarios</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">usuario</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;usuario&quot;</span><span class="p">])</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Usuario ya existe....&quot;</span><span class="p">)</span>
+                <span class="k">except</span> <span class="n">Usuarios</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
+                    <span class="n">q</span><span class="o">.</span><span class="n">usuario</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;usuario&quot;</span><span class="p">]</span>
+                    
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">q</span><span class="o">.</span><span class="n">usuario</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;usuario&quot;</span><span class="p">]</span>
+            
+            <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;password&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                <span class="n">q</span><span class="o">.</span><span class="n">contraseña</span> <span class="o">=</span> <span class="n">claveEncriptada</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;password&quot;</span><span class="p">])</span>
+            
+            <span class="n">q</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            
+            <span class="c1">#Cambiar datos de la sesion</span>
+            <span class="n">login</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">nombre</span>
+            <span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">apellido</span>
+            <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s2">&quot;logueo&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">login</span>
+            
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Perfil actualizado correctamente!&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">Usuarios</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;No existe el usuario...&quot;</span><span class="p">)</span>    
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;No envió datos...&quot;</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;checho:perfil&#39;</span><span class="p">)</span></div>
+              
+
+
+<span class="c1">#Crud servicios</span>
+<div class="viewcode-block" id="servicios"><a class="viewcode-back" href="../../modules/checho.html#checho.views.servicios">[docs]</a><span class="k">def</span> <span class="nf">servicios</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Esta funcion consulta los servicios en la base de datos.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        html: Pagina para listar los servicios.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">Servicios</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">pag</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>   <span class="c1">#cinco registros por página</span>
+    <span class="n">page_number</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;page&#39;</span><span class="p">)</span>
+        
+    <span class="c1">#sobreescribo el query</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">pag</span><span class="o">.</span><span class="n">get_page</span><span class="p">(</span><span class="n">page_number</span><span class="p">)</span>
+        
+    <span class="n">contexto</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;page_obj&#39;</span><span class="p">:</span> <span class="n">q</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="s1">&#39;servicios/listarServicios.html&#39;</span><span class="p">,</span><span class="n">contexto</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="registrarServicio"><a class="viewcode-back" href="../../modules/checho.html#checho.views.registrarServicio">[docs]</a><span class="k">def</span> <span class="nf">registrarServicio</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Esta funcion renderiza la pagina de registro de servicio.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        html: Pagina del formulario para registrar un servicio.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;servicios/registrarServicios.html&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="guardarServicio"><a class="viewcode-back" href="../../modules/checho.html#checho.views.guardarServicio">[docs]</a><span class="k">def</span> <span class="nf">guardarServicio</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Esta funcion recibe datos por el metodo</span>
+<span class="sd">    post y crea un servicio.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        foto (file): Foto del servicio</span>
+<span class="sd">        nomSer (str): Nombre del servicio</span>
+<span class="sd">        precio (int): Precio del servicio</span>
+<span class="sd">        descripcion (str): Descripcion del servicio</span>
+<span class="sd">        categoria (str): Categoria del servicio</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        html: Pagina donde se listan los servicios.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;POST&#39;</span><span class="p">:</span>
+            
+            <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">FILES</span><span class="p">:</span>
+                <span class="c1">#Crear instancia de File System Storage</span>
+                <span class="n">fss</span> <span class="o">=</span> <span class="n">FileSystemStorage</span><span class="p">()</span>
+                <span class="c1">#Capturar la foto del formulario</span>
+                <span class="n">f</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">FILES</span><span class="p">[</span><span class="s2">&quot;foto&quot;</span><span class="p">]</span>
+                <span class="c1">#Cargar archivo al servidor</span>
+                <span class="n">file</span> <span class="o">=</span> <span class="n">fss</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;checho/fotos/&quot;</span> <span class="o">+</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+                
+            <span class="k">else</span><span class="p">:</span>
+                
+                <span class="n">file</span> <span class="o">=</span> <span class="s2">&quot;checho/fotos/default2.png&quot;</span> 
+
+            <span class="n">nomSer</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s1">&#39;nombre&#39;</span><span class="p">]</span>
+            <span class="n">precio</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s1">&#39;precio&#39;</span><span class="p">]</span>
+            <span class="n">descripcion</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s1">&#39;descripcion&#39;</span><span class="p">]</span>
+            <span class="n">categoria</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s1">&#39;categoria&#39;</span><span class="p">]</span>
+
+            <span class="n">q</span><span class="o">=</span><span class="n">Usuarios</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">nombre</span><span class="o">=</span><span class="n">nomSer</span><span class="p">,</span><span class="n">precio</span><span class="o">=</span><span class="n">precio</span><span class="p">,</span><span class="n">descripcion</span><span class="o">=</span><span class="n">descripcion</span><span class="p">,</span><span class="n">categoria</span><span class="o">=</span><span class="n">categoria</span><span class="p">,</span><span class="n">foto</span><span class="o">=</span><span class="n">file</span><span class="p">)</span>
+
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;Servicio agregado&#39;</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;checho:listarServicios&#39;</span><span class="p">)</span>
+                    
+        <span class="k">else</span><span class="p">:</span>
+                
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Usted no envio datos &quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;checho:listarServicios&#39;</span><span class="p">)</span> 
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Error: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;checho:listarServicios&#39;</span><span class="p">)</span>  </div>
+
+<div class="viewcode-block" id="eliminarServicio"><a class="viewcode-back" href="../../modules/checho.html#checho.views.eliminarServicio">[docs]</a><span class="k">def</span> <span class="nf">eliminarServicio</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="nb">id</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Esta funcion elimina un servicio de la</span>
+<span class="sd">    base de datos por id.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        id (int): Id del servicio.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        html: Listado de servicios.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span> 
+        <span class="n">q</span><span class="o">=</span><span class="n">Servicios</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
+
+        <span class="n">q</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;Servicio Eliminado&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;checho:listarServicios&#39;</span><span class="p">)</span> 
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;  </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="editarServicio"><a class="viewcode-back" href="../../modules/checho.html#checho.views.editarServicio">[docs]</a><span class="k">def</span> <span class="nf">editarServicio</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="nb">id</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Esta funcion consulta un servicio por id</span>
+<span class="sd">    y lo envia como parametro.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        id (int): id de servicio.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">          html: Pagina de editar servicios.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">servicio</span><span class="o">=</span><span class="n">Servicios</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;servicios/serviciosEditar.html&#39;</span><span class="p">,{</span><span class="s1">&#39;servicio&#39;</span><span class="p">:</span><span class="n">servicio</span><span class="p">})</span>    </div>
+
+<div class="viewcode-block" id="guardadoServicio"><a class="viewcode-back" href="../../modules/checho.html#checho.views.guardadoServicio">[docs]</a><span class="k">def</span> <span class="nf">guardadoServicio</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Esta funcion recibe unos parametros</span>
+<span class="sd">     por metodo post y actualiza un servicio.</span>
+
+<span class="sd">     Args:</span>
+
+<span class="sd">        nomSer (str): Nombre del servicio</span>
+<span class="sd">        precio (int): Precio del servicio</span>
+<span class="sd">        descrip (str): Descripcion del servicio</span>
+<span class="sd">        categoria (str):Categoria del servicio</span>
+<span class="sd">        servicios (int): id del servicio</span>
+
+<span class="sd">     Returns:</span>
+
+<span class="sd">           html: Pagina de listado de  servicios.</span>
+
+<span class="sd">     &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;POST&#39;</span><span class="p">:</span>
+            <span class="n">nomSer</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s1">&#39;nombre&#39;</span><span class="p">]</span>
+            <span class="n">precio</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s1">&#39;precio&#39;</span><span class="p">]</span>
+            <span class="n">descrip</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s1">&#39;descripcion&#39;</span><span class="p">]</span>
+            <span class="n">categoria</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s1">&#39;categoria&#39;</span><span class="p">]</span>
+
+            <span class="n">servicios</span><span class="o">=</span><span class="n">Servicios</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
+
+            <span class="n">servicios</span><span class="o">.</span><span class="n">nombreServicio</span> <span class="o">=</span> <span class="n">nomSer</span>
+            <span class="n">servicios</span><span class="o">.</span><span class="n">precio</span> <span class="o">=</span> <span class="n">precio</span>
+            <span class="n">servicios</span><span class="o">.</span><span class="n">descripcion</span> <span class="o">=</span> <span class="n">descrip</span>
+            <span class="n">servicios</span><span class="o">.</span><span class="n">categoria</span> <span class="o">=</span> <span class="n">categoria</span>
+
+            <span class="n">servicios</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;Servicio editado&#39;</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;checho:listarServicios&#39;</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Usted no envio datos &quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;checho:listarServicios&#39;</span><span class="p">)</span>    
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Error: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;checho:listarServicios&#39;</span><span class="p">)</span></div>
+
+
+
+<span class="c1">#Portafolio</span>
+<div class="viewcode-block" id="portafolio"><a class="viewcode-back" href="../../modules/checho.html#checho.views.portafolio">[docs]</a><span class="k">def</span> <span class="nf">portafolio</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">categoria</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Esta funcion renderiza el portafolio de servicios</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        categoria (str): Categoria del servicio.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        html: Pagina del portafolio del servicio.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">portafolio</span> <span class="o">=</span> <span class="n">Servicios</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">categoria</span><span class="o">=</span><span class="n">categoria</span><span class="p">)</span>
+    <span class="n">contexto</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;portafolio&quot;</span><span class="p">:</span><span class="n">portafolio</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;portafolio/portafolio.html&#39;</span><span class="p">,</span> <span class="n">contexto</span><span class="p">)</span></div>
+
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../../index.html">Table of Contents</a></h3>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">barberia 1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">checho.views</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Juan Urrutia -  Cristian Arboleda.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+  </body>
+</html>

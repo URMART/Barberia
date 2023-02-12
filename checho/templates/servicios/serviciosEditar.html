@@ -1,0 +1,51 @@
+{% extends 'bases/base.html' %}
+{% block title %}CHECHO BARBERS REGISTRO{% endblock%}
+
+{%block content %}
+
+<div id="listar">
+
+    <section class="container ">
+        <div class=" py-3">
+
+            <form action="{% url 'checho:guardadoServicio' %}" method="post">{% csrf_token %}
+
+                <div class="row g-3 my-5">
+                    <input type="hidden" name="id" value="{{ servicio.id}}">
+                    <h1 style="color: white; ">EDITAR SERVICIOS</h1>
+                    <div class="col">
+                        <label style="color: aliceblue;" for="">Nombre del servicio</label>
+                        <input type="text" class="form-control" name="nombre" value="{{ servicio.nombreServicio }}" placeholder="Nombre del Servicio"
+                            aria-label="First name">
+                    </div>
+                    <div class="col">
+                        <label style="color: aliceblue;" for="">Precio</label>
+                        <input type="number" class="form-control" value="{{ servicio.precio }}" name="precio" placeholder="Precio Servicio"
+                            aria-label="Last name">
+                    </div>
+                    <div class="col">
+                        <label style="color: aliceblue;" for="">Descripcion</label>
+                        <input type="text" class="form-control" name="descripcion" value="{{ servicio.descripcion }}" placeholder="Descripcion del servicio"
+                            aria-label="Last name">
+                    </div>
+                    <div class="col">
+                        <label style="color: aliceblue;" for="">Categoria</label>
+                        <input type="text" class="form-control" name="categoria" value="{{ servicio.categoria }}" placeholder="Categoria del Servicio"
+                            aria-label="Last name">
+                    </div>
+                </div>
+
+                <div>
+                    <button type="submit" class="btn btn-success">GUARDAR</button>
+                </div><br>
+            </form>
+
+        </div>
+
+
+    </section><br>
+
+</div>
+
+
+{%endblock%}

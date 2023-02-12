@@ -1,0 +1,890 @@
+{% extends 'bases/base.html' %}{%load static%}
+
+{% block content %}
+    <div style="background-color: white; margin: 5%; text-align: center;">
+        <h1>Semana Tres</h1>
+
+        <div style="display: flex; justify-content:space-around;">
+            <h4>Agenda del {{ fecha }}</h4>
+            <h4>Hasta el {{ fechaf }}</h4>
+        </div>
+        <form action="{% url 'checho:actualizarAgendamiento' fecha fechaf %}" method="post" style="padding:1em;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Guardar</button><br/><br/>
+            <input type="number" name="semana" hidden  value="3">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Hora</th>
+                        <th>Domingo</th>
+                        <th>Lunes</th>
+                        <th>Martes</th>
+                        <th>Miércoles</th>
+                        <th>Jueves</th>
+                        <th>Viernes</th>
+                        <th>Sábado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>11:00 - 11:59</td>
+                        <td>
+                            <a id="enlace_D11" onclick="checksAgenda(document.getElementById('enlace_D11'),
+                             document.getElementById('D11'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "D" and i.hora == 11 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="D-11" id="D11"
+                            {% for i in datos %}
+                                {% if i.dia == "D" and i.hora == 11 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+
+                        </td>
+                        <td>
+                            <a id="enlace_L11" onclick="checksAgenda(document.getElementById('enlace_L11'),
+                             document.getElementById('L11'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "L" and i.hora == 11 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="L-11" id="L11"
+                            {% for i in datos %}
+                                {% if i.dia == "L" and i.hora == 11 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    <td>
+                            <a id="enlace_M11" onclick="checksAgenda(document.getElementById('enlace_M11'),
+                            document.getElementById('M11'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "M" and i.hora == 11 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden  name="agenda[]" value="M-11" id="M11"
+                            {% for i in datos %}
+                                {% if i.dia == "M" and i.hora == 11 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    <td>
+                            <a id="enlace_X11" onclick="checksAgenda(document.getElementById('enlace_X11'),
+                             document.getElementById('X11'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "X" and i.hora == 11 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="X-11" id="X11"
+                            {% for i in datos %}
+                                {% if i.dia == "X" and i.hora == 11 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    <td>
+                            <a id="enlace_J11" onclick="checksAgenda(document.getElementById('enlace_J11'),
+                            document.getElementById('J11'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "J" and i.hora == 11 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="J-11" id="J11"
+                            {% for i in datos %}
+                                {% if i.dia == "J" and i.hora == 11 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    <td>
+                            <a id="enlace_V11" onclick="checksAgenda(document.getElementById('enlace_V11'),
+                            document.getElementById('V11'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "V" and i.hora == 11 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden  name="agenda[]" value="V-11" id="V11"
+                            {% for i in datos %}
+                                {% if i.dia == "V" and i.hora == 11 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    <td>
+                            <a id="enlace_S11" onclick="checksAgenda(document.getElementById('enlace_S11'),
+                             document.getElementById('S11'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "S" and i.hora == 11 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden  name="agenda[]" value="S-11" id="S11"
+                            {% for i in datos %}
+                                {% if i.dia == "S" and i.hora == 11 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>12:00 - 12:59</td>
+                        <td>
+                            <a id="enlace_D12" onclick="checksAgenda(document.getElementById('enlace_D12'),
+                             document.getElementById('D12'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "D" and i.hora == 12 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="D-12" id="D12"
+                            {% for i in datos %}
+                                {% if i.dia == "D" and i.hora == 12 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                        <td>
+                            <a id="enlace_L12" onclick="checksAgenda(document.getElementById('enlace_L12'),
+                             document.getElementById('L12'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "L" and i.hora == 12 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden  name="agenda[]" value="L-12" id="L12"
+                            {% for i in datos %}
+                                {% if i.dia == "L" and i.hora == 12 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    <td>
+                            <a id="enlace_M12" onclick="checksAgenda(document.getElementById('enlace_M12'),
+                            document.getElementById('M12'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "M" and i.hora == 12 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="M-12" id="M12"
+                            {% for i in datos %}
+                                {% if i.dia == "M" and i.hora == 12 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    <td>
+                            <a id="enlace_X12" onclick="checksAgenda(document.getElementById('enlace_X12'),
+                             document.getElementById('X12'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "X" and i.hora == 12 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="X-12" id="X12"
+                            {% for i in datos %}
+                                {% if i.dia == "X" and i.hora == 12 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    <td>
+                            <a id="enlace_J12" onclick="checksAgenda(document.getElementById('enlace_J12'),
+                            document.getElementById('J12'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "J" and i.hora == 12 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="J-12" id="J12"
+                            {% for i in datos %}
+                                {% if i.dia == "J" and i.hora == 12 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    <td>
+                            <a id="enlace_V12" onclick="checksAgenda(document.getElementById('enlace_V12'),
+                            document.getElementById('V12'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "V" and i.hora == 12 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden  name="agenda[]" value="V-12" id="V12"
+                            {% for i in datos %}
+                                {% if i.dia == "V" and i.hora == 12 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    <td>
+                            <a id="enlace_S12" onclick="checksAgenda(document.getElementById('enlace_S12'),
+                             document.getElementById('S12'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "S" and i.hora == 12 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="S-12" id="S12"
+                            {% for i in datos %}
+                                {% if i.dia == "S" and i.hora == 12 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>13:00 - 13:59</td>
+                        <td>
+                            <a id="enlace_D13" onclick="checksAgenda(document.getElementById('enlace_D13'),
+                             document.getElementById('D13'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "D" and i.hora == 13 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="D-13" id="D13"
+                            {% for i in datos %}
+                                {% if i.dia == "D" and i.hora == 13 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                        <td>
+                            <a id="enlace_L13" onclick="checksAgenda(document.getElementById('enlace_L13'),
+                             document.getElementById('L13'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "L" and i.hora == 13 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden  name="agenda[]" value="L-13" id="L13"
+                            {% for i in datos %}
+                                {% if i.dia == "L" and i.hora == 13 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    <td>
+                            <a id="enlace_M13" onclick="checksAgenda(document.getElementById('enlace_M13'),
+                            document.getElementById('M13'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "M" and i.hora == 13 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="M-13" id="M13"
+                            {% for i in datos %}
+                                {% if i.dia == "M" and i.hora == 13 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    <td>
+                            <a id="enlace_X13" onclick="checksAgenda(document.getElementById('enlace_X13'),
+                             document.getElementById('X13'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "X" and i.hora == 13 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="X-13" id="X13"
+                            {% for i in datos %}
+                                {% if i.dia == "X" and i.hora == 13 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    <td>
+                            <a id="enlace_J13" onclick="checksAgenda(document.getElementById('enlace_J13'),
+                            document.getElementById('J13'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "J" and i.hora == 13 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="J-13" id="J13"
+                            {% for i in datos %}
+                                {% if i.dia == "J" and i.hora == 13 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    <td>
+                            <a id="enlace_V13" onclick="checksAgenda(document.getElementById('enlace_V13'),
+                            document.getElementById('V13'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "V" and i.hora == 13 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden  name="agenda[]" value="V-13" id="V13"
+                            {% for i in datos %}
+                                {% if i.dia == "V" and i.hora == 13 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    <td>
+                            <a id="enlace_S13" onclick="checksAgenda(document.getElementById('enlace_S13'),
+                             document.getElementById('S13'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "S" and i.hora == 13 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="S-13" id="S13"
+                            {% for i in datos %}
+                                {% if i.dia == "S" and i.hora == 13 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>14:00 - 14:59</td>
+                        <td>
+                            <a id="enlace_D14" onclick="checksAgenda(document.getElementById('enlace_D14'),
+                             document.getElementById('D14'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "D" and i.hora == 14 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="D-14" id="D14"
+                            {% for i in datos %}
+                                {% if i.dia == "D" and i.hora == 14 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                        <td>
+                            <a id="enlace_L14" onclick="checksAgenda(document.getElementById('enlace_L14'),
+                             document.getElementById('L14'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "L" and i.hora == 14 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="L-14" id="L14"
+                            {% for i in datos %}
+                                {% if i.dia == "L" and i.hora == 14 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    <td>
+                            <a id="enlace_M14" onclick="checksAgenda(document.getElementById('enlace_M14'),
+                            document.getElementById('M14'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "M" and i.hora == 14 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="M-14" id="M14"
+                            {% for i in datos %}
+                                {% if i.dia == "M" and i.hora == 14 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    <td>
+                            <a id="enlace_X14" onclick="checksAgenda(document.getElementById('enlace_X14'),
+                             document.getElementById('X14'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "X" and i.hora == 14 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="X-14" id="X14"
+                            {% for i in datos %}
+                                {% if i.dia == "X" and i.hora == 14 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    <td>
+                            <a id="enlace_J14" onclick="checksAgenda(document.getElementById('enlace_J14'),
+                            document.getElementById('J14'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "J" and i.hora == 14 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden  name="agenda[]" value="J-14" id="J14"
+                            {% for i in datos %}
+                                {% if i.dia == "J" and i.hora == 14 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    <td>
+                            <a id="enlace_V14" onclick="checksAgenda(document.getElementById('enlace_V14'),
+                            document.getElementById('V14'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "V" and i.hora == 14 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden  name="agenda[]" value="V-14" id="V14"
+                            {% for i in datos %}
+                                {% if i.dia == "V" and i.hora == 14 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    <td>
+                            <a id="enlace_S14" onclick="checksAgenda(document.getElementById('enlace_S14'),
+                             document.getElementById('S14'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "S" and i.hora == 14 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden  name="agenda[]" value="S-14" id="S14"
+                            {% for i in datos %}
+                                {% if i.dia == "S" and i.hora == 14 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>15:00 - 15:59</td>
+                        <td>
+                            <a id="enlace_D15" onclick="checksAgenda(document.getElementById('enlace_D15'),
+                             document.getElementById('D15'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "D" and i.hora == 15 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="D-15" id="D15"
+                            {% for i in datos %}
+                                {% if i.dia == "D" and i.hora == 15 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                        <td>
+                            <a id="enlace_L15" onclick="checksAgenda(document.getElementById('enlace_L15'),
+                             document.getElementById('L15'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "L" and i.hora == 15 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="L-15" id="L15"
+                            {% for i in datos %}
+                                {% if i.dia == "L" and i.hora == 15 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    <td>
+                            <a id="enlace_M15" onclick="checksAgenda(document.getElementById('enlace_M15'),
+                            document.getElementById('M15'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "M" and i.hora == 15 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="M-15" id="M15"
+                            {% for i in datos %}
+                                {% if i.dia == "M" and i.hora == 15 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    <td>
+                            <a id="enlace_X15" onclick="checksAgenda(document.getElementById('enlace_X15'),
+                             document.getElementById('X15'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "X" and i.hora == 15 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="X-15" id="X15"
+                            {% for i in datos %}
+                                {% if i.dia == "X" and i.hora == 15 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    <td>
+                            <a id="enlace_J15" onclick="checksAgenda(document.getElementById('enlace_J15'),
+                            document.getElementById('J15'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "J" and i.hora == 15 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="J-15" id="J15"
+                            {% for i in datos %}
+                                {% if i.dia == "J" and i.hora == 15 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    <td>
+                            <a id="enlace_V15" onclick="checksAgenda(document.getElementById('enlace_V15'),
+                            document.getElementById('V15'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "V" and i.hora == 15 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden  name="agenda[]" value="V-15" id="V15"
+                            {% for i in datos %}
+                                {% if i.dia == "V" and i.hora == 15 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    <td>
+                            <a id="enlace_S15" onclick="checksAgenda(document.getElementById('enlace_S15'),
+                             document.getElementById('S15'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "S" and i.hora == 15 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden  name="agenda[]" value="S-15" id="S15"
+                            {% for i in datos %}
+                                {% if i.dia == "S" and i.hora == 15 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>16:00 - 16:59</td>
+                        <td>
+                            <a id="enlace_D16" onclick="checksAgenda(document.getElementById('enlace_D16'),
+                             document.getElementById('D16'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "D" and i.hora == 16 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="D-16" id="D16"
+                            {% for i in datos %}
+                                {% if i.dia == "D" and i.hora == 16 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                        <td>
+                            <a id="enlace_L16" onclick="checksAgenda(document.getElementById('enlace_L16'),
+                             document.getElementById('L16'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "L" and i.hora == 16 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="L-16" id="L16"
+                            {% for i in datos %}
+                                {% if i.dia == "L" and i.hora == 16 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    <td>
+                            <a id="enlace_M16" onclick="checksAgenda(document.getElementById('enlace_M16'),
+                            document.getElementById('M16'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "M" and i.hora == 16 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="M-16" id="M16"
+                            {% for i in datos %}
+                                {% if i.dia == "M" and i.hora == 16 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    <td>
+                            <a id="enlace_X16" onclick="checksAgenda(document.getElementById('enlace_X16'),
+                             document.getElementById('X16'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "X" and i.hora == 16 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="X-16" id="X16"
+                            {% for i in datos %}
+                                {% if i.dia == "X" and i.hora == 16 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    <td>
+                            <a id="enlace_J16" onclick="checksAgenda(document.getElementById('enlace_J16'),
+                            document.getElementById('J16'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "J" and i.hora == 16 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="J-16" id="J16"
+                            {% for i in datos %}
+                                {% if i.dia == "J" and i.hora == 16 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    <td>
+                            <a id="enlace_V16" onclick="checksAgenda(document.getElementById('enlace_V16'),
+                            document.getElementById('V16'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "V" and i.hora == 16 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox"  hidden name="agenda[]" value="V-16" id="V16"
+                            {% for i in datos %}
+                                {% if i.dia == "V" and i.hora == 16 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    <td>
+                            <a id="enlace_S16" onclick="checksAgenda(document.getElementById('enlace_S16'),
+                             document.getElementById('S16'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "S" and i.hora == 16 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="S-16" id="S16"
+                            {% for i in datos %}
+                                {% if i.dia == "S" and i.hora == 16 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>17:00 - 17:59</td>
+                        <td>
+                            <a id="enlace_D17" onclick="checksAgenda(document.getElementById('enlace_D17'),
+                             document.getElementById('D17'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "D" and i.hora == 17 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="D-17" id="D17"
+                            {% for i in datos %}
+                                {% if i.dia == "D" and i.hora == 17 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                        <td>
+                            <a id="enlace_L17" onclick="checksAgenda(document.getElementById('enlace_L17'),
+                             document.getElementById('L17'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "L" and i.hora == 17 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="L-17" id="L17"
+                            {% for i in datos %}
+                                {% if i.dia == "L" and i.hora == 17 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    <td>
+                            <a id="enlace_M17" onclick="checksAgenda(document.getElementById('enlace_M17'),
+                            document.getElementById('M11'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "M" and i.hora == 17 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="M-17" id="M17"
+                            {% for i in datos %}
+                                {% if i.dia == "M" and i.hora == 17 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    <td>
+                            <a id="enlace_X17" onclick="checksAgenda(document.getElementById('enlace_X17'),
+                             document.getElementById('X17'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "X" and i.hora == 17 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="X-17" id="X17"
+                            {% for i in datos %}
+                                {% if i.dia == "X" and i.hora == 17 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    <td>
+                            <a id="enlace_J17" onclick="checksAgenda(document.getElementById('enlace_J17'),
+                            document.getElementById('J17'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "J" and i.hora == 17 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="J-17" id="J17"
+                            {% for i in datos %}
+                                {% if i.dia == "J" and i.hora == 17 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    <td>
+                            <a id="enlace_V17" onclick="checksAgenda(document.getElementById('enlace_V17'),
+                            document.getElementById('V17'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "V" and i.hora == 17 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="V-17" id="V17"
+                            {% for i in datos %}
+                                {% if i.dia == "V" and i.hora == 17 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    <td>
+                            <a id="enlace_S17" onclick="checksAgenda(document.getElementById('enlace_S17'),
+                             document.getElementById('S17'));" href="#" class="btn btn-outline-primary
+                            {% for i in datos %}
+                                {% if i.dia == "S" and i.hora == 17 %}
+                                    active
+                                {% endif %}
+                            {% endfor %}
+                            " role="button" data-bs-toggle="button">Seleccionar</a>
+                            <input type="checkbox" hidden name="agenda[]" value="S-17" id="S17"
+                            {% for i in datos %}
+                                {% if i.dia == "S" and i.hora == 17 %}
+                                    checked = "checked"
+                                {% endif %}
+                            {% endfor %}
+                            />
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </form>
+
+    </div>
+{% endblock %}

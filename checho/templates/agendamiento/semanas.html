@@ -1,0 +1,17 @@
+{% extends 'bases/base.html' %}
+
+{% block content %}
+
+<div style=" background-color: white; margin:5%; text-align: center;">
+
+    <h1 id="color" >AGENDAR SEMANAS</h1 >
+
+    <div style="margin: 2em;padding:1em;">
+        <a class="btn btn-info" href="{% url 'checho:vistaAgendamientoS1' fecha fechaf %}">Semana uno</a>
+        <a class="btn btn-info" href="{% url 'checho:vistaAgendamientoS2' fecha fechaf %}">Semana dos</a>
+        <a class="btn btn-info" href="{% url 'checho:vistaAgendamientoS3' fecha fechaf %}">Semana tres</a>
+        <a class="btn btn-info" href="{% url 'checho:vistaAgendamientoS4' fecha fechaf %}">Semana cuatro</a>
+    </div>
+
+</div>
+{% endblock %}

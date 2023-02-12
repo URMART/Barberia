@@ -1,0 +1,49 @@
+{% extends 'bases/base.html' %}
+{% block title %}CHECHO BARBERS REGISTRO{% endblock%}
+
+{%block content %}
+
+<div id="listar">
+
+    <section class="container ">
+        <div class=" py-3">
+
+            <form action="{% url 'checho:guardarServicio' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+
+                <div class="row g-3 my-5">
+                    <h1 style="color: white; ">REGISTRAR SERVICIOS</h1>
+                    <div class="col">
+                        <input type="text" class="form-control" name="nombre" placeholder="Nombre del Servicio"
+                            aria-label="First name">
+                    </div>
+                    <div class="col">
+                        <input type="number" class="form-control" name="precio" placeholder="Precio Servicio"
+                            aria-label="Last name">
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control" name="descripcion" placeholder="Descripcion del servicio"
+                            aria-label="Last name">
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control" name="categoria" placeholder="Categoria del Servicio"
+                            aria-label="Last name">
+                    </div>
+                    <div class="col">
+                        <input type="file" class="form-control" name="foto" style="width:70%; margin-left: auto; margin-right:auto;" accept="image/*"><br/>
+                    </div>
+                </div>
+
+                <div>
+                    <button type="submit" class="btn btn-success">REGISTAR</button>
+                </div><br>
+            </form>
+
+        </div>
+
+
+    </section><br>
+
+</div>
+
+
+{%endblock%}

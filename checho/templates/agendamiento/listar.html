@@ -1,0 +1,61 @@
+{% extends 'bases/base.html' %}
+
+{% block content %}
+
+<div style="background-color: white; margin:5%; text-align: center;">
+    <h1 id="color" >AGENDAS</h1 >
+    {% if request.session.logueo.4 == 'Administrador' %}
+    <a class=" btn btn-primary"  href="{% url 'checho:agendaEmpleado'%}">Nueva AGENDA</a> <br /><br />
+    {% endif %}
+
+    {% if datos %}
+
+        <table class="table" style="background-color: white; ">
+            <thead>
+                <tr>
+                    <td>Fecha Inicio</td>
+                    <td>Fecha Fin</td>
+                    <td colspan="2">Operaciones</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for registro in datos %}
+                <tr>
+                    <td>{{ registro.fecha_inicio }}</td>
+                    <td>{{ registro.fecha_fin }}</td>
+                    <td>
+                        <a class="btn btn-info" href="{% url 'checho:vistaSemana' registro.fecha_inicio registro.fecha_fin %}">Ver Semanas</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+
+    {% elif request.session.logueo.4 == 'Administrador'%}
+        {% if todos %}
+            <table class="table" style="background-color: white; ">
+                <thead>
+                    <tr>
+                        <td>Fecha Inicio</td>
+                        <td>Fecha Fin</td>
+                        <td colspan="2">Operaciones</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for registro in todos %}
+                    <tr>
+                        <td>{{ registro.fecha_inicio }}</td>
+                        <td>{{ registro.fecha_fin }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+         {% else %}
+            <h2>No hay Agendas</h2>
+         {% endif %}
+    {% else %}
+        <h1>No hay datos </h1>
+    {% endif %}
+</div>
+{% endblock %}

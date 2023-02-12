@@ -1,0 +1,113 @@
+{% extends 'bases/base.html' %}{%load static%}
+{% block title %}CHECHO BARBERS{% endblock%}
+
+{% block content %}
+
+<section id="uno">
+
+
+    <div class="carrousel">
+        <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active" data-bs-interval="10000">
+                    <img src="{% static 'img/barba.jpg' %}" class="d-block w-100" alt="... "
+                        style="height: 60vh;width: 40vh;">
+                </div>
+                <div class="carousel-item" data-bs-interval="2000">
+                    <img src="{% static 'img/corte2.jpg' %}" class="d-block w-100" alt="..."
+                        style="height: 60vh; width: 40vh ;">
+                </div>
+                <div class="carousel-item">
+                    <img src="{% static 'img/tinte3.jpg' %} " class="d-block w-100" alt="..."
+                        style="height: 60vh;width: 40vh;">
+                </div>
+            </div>
+            <button class="carousel-control-prev " type="button" data-bs-target="#carouselExampleInterval"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon bg-dark" aria-hidden="true"></span>
+                <span class="visually-hidden ">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval"
+                data-bs-slide="next">
+                <span class="carousel-control-next-icon bg-dark" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+
+
+</section>
+
+
+<div class="row my-4  cont2" style="border: solid 1px rgb(3, 3, 3);">
+
+    <div class="col col-sm-12 col-md-12 col-lg-6 col-xl-6">
+        <div id="content">
+            <h1 id="h1">¿QUE OFRECEMOS?</h1>
+            <p id="parrafo">Tenemos los mejores cortes de la zona, un gran precio y unos muy buenos barberos
+                que harán que no te quieras cambiar de barbería, te hacemos sentir como en casa y
+                sales contento con un corte bien exótico.
+            </p>
+        </div>
+
+
+    </div>
+    <div class="col col-sm-12 col-md-12 col-lg-6 col-xl-6 " style="padding: 1em;    ">
+        <img class="img-fluid" src="{% static 'img/porta.jpg' %}"
+            style="height: 60vh; min-width: 200px;width: 40vh ; border: solid  white;" alt="">
+    </div>
+
+
+</div>
+
+<div class="test"   >
+    <a href=""></a><h1 style="background-color: rgb(26, 25, 25); " >PORTAFOLIO</h1></a>
+</div>
+
+<div class="row mx-auto" id="sect1"  >
+
+    <div class="col col-sm-12 col-md-4 col-lg-4 col-xl-4" >
+        <h4><a href="{% url 'checho:portafolio' 'corte' %}">CORTES</a> </h4><img src="{% static 'img/CORTE.jpg' %}" alt="corte" class="img-fluid tama1" style="min-width: 200px;" >
+    </div>
+    <div class="col col-sm-12 col-md-4 col-lg-4 col-xl-4" >
+        <h4><a href="{% url 'checho:portafolio' 'tintura' %}">TINTES</a></h4><img src="{% static 'img/tinte1.jpg' %}" alt=" tinte" class="img-fluid tama2" style="min-width: 200px; height: 230px;" >
+    </div>
+    <div class="col col-sm-12 col-md-4 col-lg-4 col-xl-4">
+        <h4><a  href="{% url 'checho:portafolio' 'barba' %}">BARBAS</a></h4><img src="{% static 'img/barba.jpg' %}" alt="barba" class="img-fluid tama3" style="min-width: 200px;" >
+    </div>
+
+
+
+</div>
+
+<div class=" row sect3 my-4 " >
+
+    <div class="col col-sm-12 col-md-6 col-lg-6 col-xl-6 " >
+        <h2 style="color: white ;">Horarios</h2>
+        <div>
+            
+            <h4 style="color: white ;">Horario de apertura</h4>
+            <h5 style="color: white ;"> Lunes - Domingo </h5>
+            <h5 style="color: white ;"> 11 AM  - 5 PM</h5>
+            <h4 style="color: white ;">informacion adicional</h4>
+            <h5 style="color: white ;">No pierdas la oportunidad de probar nuestro servicio</h5>
+
+        </div>
+    </div>
+    <div class="col col-sm-12 col-md-6 col-lg-6 col-xl-6">
+        <h2 style="color: white ;">Agendar Cita</h2>
+        <div >
+             <a href="{% url 'checho:index' %}">
+                <img {% if request.session.logueo %}
+                        href="#"
+                    {% else %}
+                        onclick="alert('debes registrarte para continuar')"
+                {% endif %}
+                     class="img-fluid " style="height:220px ; width: 250px;" src="{% static 'img/calen2.jpg' %}" alt="">
+            </a>
+        </div>
+    </div>
+</div>
+<br>
+
+{% endblock %}
